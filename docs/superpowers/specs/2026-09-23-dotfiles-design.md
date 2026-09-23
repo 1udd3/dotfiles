@@ -127,7 +127,7 @@ Firefox is intentionally not installed.
 
 ## Safety and privacy
 
-The public repository contains no secrets, private keys, tokens, personal Git identity, machine-specific usernames, or wallpaper paths. Git identity remains local. Before publishing, scan all tracked files for private-key markers, token-like strings, and `/home/ludvig` paths.
+The public repository contains no secrets, private keys, tokens, personal Git identity, machine-specific usernames, or wallpaper paths. Git identity remains local. Before publishing, scan all tracked files for private-key markers, token-like strings, and paths under the configured `SOURCE_HOME`.
 
 Ansible's `backup: yes` protects managed files that change. `set-theme` separately backs up an existing `current_wallpaper` before replacing it because the user-invoked theme selector must update that state.
 
