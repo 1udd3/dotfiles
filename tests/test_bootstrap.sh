@@ -64,6 +64,9 @@ grep -Fq "ansible_facts['distribution'] == 'Fedora'" "$ROOT/ansible/site.yml"
 grep -Fq "ansible_facts['distribution'] == 'Archlinux' or ansible_facts['distribution_version'] | int >= 44" "$ROOT/ansible/site.yml"
 ! grep -Fq 'wlogout' "$ROOT/ansible/group_vars/all.yml"
 ! grep -Fq 'wlogout' "$ROOT/home/.config/niri/config.kdl"
+grep -Fq '  - breeze-cursor-theme' "$ROOT/ansible/group_vars/all.yml"
+grep -Fq '  - breeze-cursors' "$ROOT/ansible/group_vars/all.yml"
+grep -Fq 'XCURSOR_THEME "breeze_cursors"' "$ROOT/home/.config/niri/config.kdl"
 # No AUR helpers or package-manager commands outside Bash's required dnf/pacman path.
 helper_pattern='(^|[^[:alnum:]_])(aur|aurhelper|aurutils|yay|paru|pikaur|trizen|octopi|garud|makepkg|flatpak|snap|brew|zypper|apt|apk)([^[:alnum:]_]|$)'
 ! grep -Eiq "$helper_pattern" "$ROOT/bootstrap"

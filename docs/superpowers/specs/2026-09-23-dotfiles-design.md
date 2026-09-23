@@ -122,7 +122,7 @@ The package map covers:
 - Neovim, xpad, and Orca
 - Fedora: JetBrains Mono fonts plus Cascadia patched Nerd Font fallback
 - Arch: JetBrains Mono Nerd Font plus Cascadia patched Nerd Font fallback
-- Papirus icon theme
+- Papirus icon theme and Breeze cursor theme (Fedora `breeze-cursor-theme`, Arch `breeze-cursors`)
 
 Matugen is packaged for Fedora 44+. Wlogout is not automatically installed because it is AUR-only on Arch.
 
