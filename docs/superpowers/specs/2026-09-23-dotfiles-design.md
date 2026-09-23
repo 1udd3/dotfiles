@@ -31,6 +31,7 @@ The repository uses a single playbook and inventory instead of a role or collect
 ## Included configuration
 
 - Bash startup files, excluding personal Git identity
+- Compact Fastfetch startup output without a logo
 - Niri
 - Waybar
 - Matugen templates and theme pipeline
