@@ -5,11 +5,13 @@ Public Fedora 44+ and Arch desktop configuration managed by Ansible.
 ## Install
 
 ```bash
-git clone "$DOTFILES_REPOSITORY" ~/.dotfiles
+git clone https://github.com/1udd3/dotfiles.git ~/.dotfiles
 ~/.dotfiles/bootstrap
 ```
 
-`DOTFILES_REPOSITORY` is this repository's public HTTPS URL. Cloning it requires no login. The tiny Bash bootstrap installs Ansible Core; Ansible rejects Fedora releases below 44 before installing packages.
+Public repository URL: https://github.com/1udd3/dotfiles
+
+Cloning it requires no login. The tiny Bash bootstrap installs Ansible Core; Ansible rejects Fedora releases below 44 before installing packages.
 
 ## Update
 
