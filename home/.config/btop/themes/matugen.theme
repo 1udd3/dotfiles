@@ -1,0 +1,40 @@
+# Main background, accents and key color
+theme[main_bg]="#0e1415"
+theme[main_fg]="#dee4e4"
+theme[title]="#dee4e4"
+theme[hi_fg]="#81d3de"
+theme[selected_bg]="#303637"
+theme[selected_fg]="#81d3de"
+theme[inactive_fg]="#899294"
+theme[graph_text]="#bec8ca"
+
+# Text color for box borders
+theme[proc_box]="#81d3de"
+theme[cpu_box]="#b1cbcf"
+theme[mem_box]="#b9c6ea"
+theme[net_box]="#81d3de"
+
+# Outline color of boxes
+theme[proc_border]="#899294"
+theme[cpu_border]="#899294"
+theme[mem_border]="#899294"
+theme[net_border]="#899294"
+
+# CPU graph colors
+theme[cpu_start]="#81d3de"
+theme[cpu_mid]="#b1cbcf"
+theme[cpu_end]="#b9c6ea"
+
+# Mem box outline color
+theme[free]="#81d3de"
+theme[cached]="#b1cbcf"
+theme[available]="#b9c6ea"
+theme[used]="#ffb4ab"
+
+# Download/Upload graph colors
+theme[download_start]="#81d3de"
+theme[download_mid]="#b1cbcf"
+theme[download_end]="#b9c6ea"
+theme[upload_start]="#b9c6ea"
+theme[upload_mid]="#b1cbcf"
+theme[upload_end]="#81d3de"

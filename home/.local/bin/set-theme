@@ -1,0 +1,40 @@
+#!/usr/bin/env bash
+
+WALL_DIR="$HOME/Pictures/wallpapers"
+mkdir -p "$WALL_DIR"
+
+# 1. Hämta enbart filnamnen på bilderna och låt användaren välja i Fuzzel
+SELECTED_FILE=$(find "$WALL_DIR" -type f \( -name "*.jpg" -o -name "*.png" -o -name "*.jpeg" \) -exec basename {} \; | fuzzel --dmenu -p "Välj bakgrund: ")
+
+# Avbryt om inget valdes
+if [ -z "$SELECTED_FILE" ]; then
+    echo "Ingen bild valdes."
+    exit 1
+fi
+
+# Sätt ihop den fullständiga sökvägen igen
+WALLPAPER="$WALL_DIR/$SELECTED_FILE"
+
+if [ ! -f "$WALLPAPER" ]; then
+    echo "Filen hittades inte."
+    exit 1
+fi
+
+# 2. Spara bilden för omstart
+STATE_FILE="$HOME/.config/current_wallpaper"
+if [ -e "$STATE_FILE" ]; then
+    BACKUP_DIR="$HOME/.local/state/dotfiles/backups"
+    mkdir -p "$BACKUP_DIR" || exit 1
+    timestamp=$(date +%Y%m%d%H%M%S%N) || exit 1
+    backup=$(mktemp "$BACKUP_DIR/current_wallpaper.$timestamp.XXXXXX") || exit 1
+    if ! cp -- "$STATE_FILE" "$backup"; then
+        rm -f -- "$backup"
+        exit 1
+    fi
+fi
+printf '%s\n' "$WALLPAPER" > "$STATE_FILE"
+
+# 3. Verkställ bakgrundsbilden och generera färger med Matugen
+pkill swaybg
+swaybg -i "$WALLPAPER" -m fill &
+matugen image "$WALLPAPER"

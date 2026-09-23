@@ -1,0 +1,24 @@
+// Copy uncommented output blocks into this file on each machine.
+// Run `niri msg outputs` to discover connector names.
+// Values omitted from the shared configuration are marked "not set".
+
+/-output "DP-1" {
+    // mode "2560x1440@239.970"
+    // scale 1
+    // position x=2560 y=0
+    // transform "normal"
+}
+
+/-output "HDMI-A-1" {
+    // mode: not set
+    // scale: not set
+    // position: not set
+    // transform "270"
+}
+
+/-output "eDP-1" {
+    // mode: not set
+    // scale 0.9
+    // position: not set
+    // transform: not set
+}

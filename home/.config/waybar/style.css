@@ -1,0 +1,67 @@
+@import url("colors.css");
+
+* {
+  font-family: "JetBrainsMono Nerd Font";
+  font-size: 13px;
+  font-weight: bold;
+  border: none;
+  min-height: 0;
+}
+
+window#waybar {
+  background: alpha(@background, 0.85);
+  color: @foreground;
+  border-radius: 12px;
+}
+
+#workspaces button {
+  padding: 0 5px;
+  font-size: 18px;
+  color: @foreground;
+}
+
+#workspaces button.focused {
+  color: @primary;
+}
+
+#clock,
+#cpu,
+#memory,
+#temperature,
+#pulseaudio,
+#tray {
+  background: alpha(@background-alt, 0.8);
+  padding: 0 12px;
+  margin: 4px;
+  border-radius: 10px;
+}
+
+#clock {
+  color: @tertiary;
+}
+
+#pulseaudio {
+  color: @secondary;
+}
+
+#cpu {
+  color: @primary;
+}
+
+#memory {
+  color: @secondary;
+}
+
+#temperature {
+  color: @tertiary;
+}
+
+#tray {
+  color: @foreground;
+}
+
+tooltip {
+  background: @background;
+  color: @foreground;
+  border-radius: 8px;
+}

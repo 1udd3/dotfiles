@@ -1,0 +1,9 @@
+#!/usr/bin/env bash
+
+# Läs in den sparade sökvägen om filen finns
+if [ -f ~/.config/current_wallpaper ]; then
+    WALLPAPER=$(cat ~/.config/current_wallpaper)
+    if [ -f "$WALLPAPER" ]; then
+        swaybg -i "$WALLPAPER" -m fill &
+    fi
+fi

@@ -1,0 +1,12 @@
+layout {
+    focus-ring {
+	width 2
+        active-gradient from="{{colors.primary.default.hex}}" to="{{colors.tertiary.default.hex}}" angle=45
+        inactive-color "{{colors.outline.default.hex}}"
+    }
+    border {
+	width 2
+        active-gradient from="{{colors.primary.default.hex}}" to="{{colors.tertiary.default.hex}}" angle=45
+        inactive-color "{{colors.outline.default.hex}}"
+    }
+}

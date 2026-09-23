@@ -1,0 +1,17 @@
+# Machine-local configuration
+home/.config/niri/hardware.kdl
+home/.config/current_wallpaper
+
+# Secrets and credentials
+*.key
+*.pem
+*.env
+.env.*
+*.secret
+*.token
+id_rsa*
+id_ed25519*
+
+# Runtime state
+*.log
+.cache/
