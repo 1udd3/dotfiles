@@ -1,0 +1,72 @@
+---
+- name: Install workstation packages
+  hosts: workstation
+  connection: local
+  become: true
+  gather_facts: true
+  tasks:
+    - name: Require Fedora or Arch
+      ansible.builtin.assert:
+        that:
+          - ansible_facts['distribution'] in ['Fedora', 'Archlinux']
+        fail_msg: >-
+          This playbook supports Fedora and Arch only; detected
+          {{ ansible_facts['distribution'] }}.
+
+    - name: Install dotfile dependencies
+      ansible.builtin.package:
+        name: "{{ dotfiles_packages }}"
+        state: present
+
+- name: Install user dotfiles
+  hosts: workstation
+  connection: local
+  become: false
+  gather_facts: true
+  vars:
+    dotfiles_home: "{{ ansible_facts['user_facts']['home'] }}"
+  tasks:
+    - name: Create dotfile directories
+      ansible.builtin.file:
+        path: "{{ dotfiles_home }}/.config"
+        state: directory
+        mode: "0755"
+
+    - name: Copy managed home files
+      ansible.builtin.copy:
+        src: "{{ playbook_dir }}/../home/"
+        dest: "{{ dotfiles_home }}/"
+        backup: yes
+        mode: preserve
+
+    - name: Make autostart-wallpaper executable
+      ansible.builtin.file:
+        path: "{{ dotfiles_home }}/.local/bin/autostart-wallpaper"
+        state: file
+        mode: "0755"
+
+    - name: Make set-theme executable
+      ansible.builtin.file:
+        path: "{{ dotfiles_home }}/.local/bin/set-theme"
+        state: file
+        mode: "0755"
+
+    - name: Check for local Niri hardware file
+      ansible.builtin.stat:
+        path: "{{ dotfiles_home }}/.config/niri/hardware.kdl"
+      register: local_hardware
+
+    - name: Seed missing Niri hardware file
+      ansible.builtin.copy:
+        src: "{{ playbook_dir }}/../home/.config/niri/hardware.example.kdl"
+        dest: "{{ dotfiles_home }}/.config/niri/hardware.kdl"
+        force: no
+        mode: "0644"
+      when: not local_hardware.stat.exists
+
+    - name: Show local next steps
+      ansible.builtin.debug:
+        msg:
+          - "Set Git identity locally with git config --global."
+          - "Edit {{ dotfiles_home }}/.config/niri/hardware.kdl for this machine."
+          - "Choose a wallpaper with set-theme; wallpaper state stays local."

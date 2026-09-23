@@ -1,0 +1,61 @@
+---
+dotfiles_packages_fedora:
+  - git
+  - bash
+  - fastfetch
+  - niri
+  - waybar
+  - alacritty
+  - fuzzel
+  - cava
+  - btop
+  - matugen
+  - swaybg
+  - swaylock
+  - wlogout
+  - playerctl
+  - brightnessctl
+  - pavucontrol
+  - pipewire
+  - wireplumber
+  - neovim
+  - xpad
+  - orca
+  - cascadia-code-nf-fonts
+  - jetbrains-mono-fonts
+  - papirus-icon-theme
+
+dotfiles_packages_arch:
+  - git
+  - bash
+  - fastfetch
+  - niri
+  - waybar
+  - alacritty
+  - fuzzel
+  - cava
+  - btop
+  - matugen
+  - swaybg
+  - swaylock
+  - wlogout
+  - playerctl
+  - brightnessctl
+  - pavucontrol
+  - pipewire
+  - wireplumber
+  - neovim
+  - xpad
+  - orca
+  - ttf-cascadia-code-nerd
+  - ttf-jetbrains-mono-nerd
+  - papirus-icon-theme
+
+dotfiles_packages: >-
+  {{
+    dotfiles_packages_fedora
+    if ansible_facts['distribution'] == 'Fedora'
+    else dotfiles_packages_arch
+    if ansible_facts['distribution'] == 'Archlinux'
+    else []
+  }}
