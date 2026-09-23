@@ -148,4 +148,3 @@ Ansible's `backup: yes` protects managed files that change. `set-theme` separate
 - Multiple hardware profiles beyond one local Niri override
 - Full desktop or browser provisioning
 - Custom roles or collections
-EOF
