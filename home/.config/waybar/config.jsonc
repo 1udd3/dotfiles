@@ -15,6 +15,7 @@
   "modules-right": [
     "pulseaudio",
     "cpu",
+    "battery",
     "clock",
     "tray"
   ],
@@ -63,6 +64,17 @@
 
   "cpu": {
     "format": " {usage}%"
+  },
+
+  "battery": {
+    "format": "{icon} {percentage}%",
+    "format-icons": ["", "", "", "", "", "", ""],
+    "format-charging": " {percentage}%",
+    "format-discharging": " {percentage}%",
+    "format-full": " {percentage}%",
+    "state-good": "",
+    "state-warning": "",
+    "state-critical": ""
   },
 
   "clock": {

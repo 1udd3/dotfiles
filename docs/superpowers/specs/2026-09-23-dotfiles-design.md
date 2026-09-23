@@ -33,7 +33,7 @@ The repository uses a single playbook and inventory instead of a role or collect
 - Bash startup files, excluding personal Git identity
 - Compact Fastfetch startup output with its built-in small logo
 - Niri
-- Waybar
+- Waybar, including battery status and charging/discharging icons
 - Matugen templates and theme pipeline
 - btop
 - Neovim/LazyVim

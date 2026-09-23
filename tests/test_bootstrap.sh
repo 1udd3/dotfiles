@@ -68,6 +68,7 @@ grep -Fq '  - breeze-cursor-theme' "$ROOT/ansible/group_vars/all.yml"
 grep -Fq '  - breeze-cursors' "$ROOT/ansible/group_vars/all.yml"
 grep -Fq 'XCURSOR_THEME "breeze_cursors"' "$ROOT/home/.config/niri/config.kdl"
 grep -Fq 'fastfetch --logo small --structure OS:Host:Kernel:Shell:CPU:Memory' "$ROOT/home/.bashrc"
+grep -Fq '"battery"' "$ROOT/home/.config/waybar/config.jsonc"
 # No AUR helpers or package-manager commands outside Bash's required dnf/pacman path.
 helper_pattern='(^|[^[:alnum:]_])(aur|aurhelper|aurutils|yay|paru|pikaur|trizen|octopi|garud|makepkg|flatpak|snap|brew|zypper|apt|apk)([^[:alnum:]_]|$)'
 ! grep -Eiq "$helper_pattern" "$ROOT/bootstrap"
