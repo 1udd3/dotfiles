@@ -24,7 +24,7 @@ if [ -d ~/.bashrc.d ]; then
 fi
 unset rc
 if command -v fastfetch >/dev/null 2>&1; then
-    fastfetch --logo none --structure OS:Host:Kernel:Shell:CPU:Memory
+    fastfetch --structure OS:Host:Kernel:Shell:CPU:Memory
 fi
 export PATH="$HOME/.cargo/bin:$PATH"
 
