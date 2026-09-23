@@ -17,10 +17,15 @@ esac
 if ((EUID == 0)); then
     "${package_command[@]}"
 elif command -v sudo >/dev/null 2>&1; then
-    sudo "${package_command[@]}"
+    sudo -v
+    sudo -n "${package_command[@]}"
 else
     printf '%s\n' 'error: sudo is required to install ansible' >&2
     exit 1
+fi
+
+if ((EUID != 0)); then
+    sudo -v
 fi
 
 exec ansible-playbook \

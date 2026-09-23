@@ -6,7 +6,7 @@ Revised design approved in chat on 2026-09-23. Specification review required bef
 
 ## Goal
 
-Provide a public GitHub repository that can be cloned without authentication. A tiny Bash bootstrap installs Ansible Core, then an Ansible playbook performs all dotfile and package management for Fedora 44+ and Arch.
+Provide a public GitHub repository that can be cloned without authentication. A tiny Bash bootstrap installs Ansible, then an Ansible playbook performs all dotfile and package management for Fedora 44+ and Arch.
 
 Fresh-machine flow:
 
@@ -52,7 +52,7 @@ Niri's shared configuration includes a local `hardware.kdl`. The playbook create
 - Firefox installation
 - Caches, logs, history, and application state
 - Full operating-system provisioning
-- Custom Ansible collections beyond Ansible Core built-ins
+- Custom Ansible collections beyond Ansible built-ins
 
 ## Repository layout
 
@@ -92,7 +92,7 @@ The `home/` tree is the single source of truth for managed files. The playbook c
 1. Require Bash, `git`, and a readable `/etc/os-release`.
 2. Detect Fedora or Arch and leave Fedora version enforcement to Ansible; fail clearly on other distributions.
 3. Install `ansible` using `dnf install -y` or `pacman -S --needed --noconfirm`.
-4. Use `sudo` only when not already root.
+4. When not root, validate the sudo credential cache with `sudo -v`, use `sudo -n` for package installation, then refresh `sudo -v` immediately before Ansible so its `become` step does not need a second interactive prompt.
 5. Run `ansible-playbook -i ansible/inventory.ini ansible/site.yml`, forwarding arguments such as `--check` and `--diff`.
 6. Do not install dotfile packages, copy files, or manage secrets in Bash.
 
