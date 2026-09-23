@@ -11,7 +11,7 @@ git clone https://github.com/1udd3/dotfiles.git ~/.dotfiles
 
 Public repository URL: https://github.com/1udd3/dotfiles
 
-Cloning it requires no login. The tiny Bash bootstrap installs Ansible and validates sudo once before Ansible's privileged package play. Run it from an interactive terminal; Ansible rejects Fedora releases below 44 before installing packages.
+Cloning it requires no login. The tiny Bash bootstrap installs Ansible and validates sudo before Ansible's privileged package play. Run it from an interactive terminal; Ansible prompts for the become password and rejects Fedora releases below 44 before installing packages.
 
 ## Update
 

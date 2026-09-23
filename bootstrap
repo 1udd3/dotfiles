@@ -29,6 +29,7 @@ if ((EUID != 0)); then
 fi
 
 exec ansible-playbook \
+    --ask-become-pass \
     -i "$ROOT/ansible/inventory.ini" \
     "$ROOT/ansible/site.yml" \
     "$@"

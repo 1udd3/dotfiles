@@ -43,14 +43,14 @@ DOTFILES_OS_RELEASE="$TMP/fedora-release" "$ROOT/bootstrap" --check --diff
 test "$(grep -c '^sudo -v$' "$BOOTSTRAP_TEST_LOG")" -eq 2
 grep -q '^sudo -n dnf install -y ansible$' "$BOOTSTRAP_TEST_LOG"
 grep -q '^dnf install -y ansible$' "$BOOTSTRAP_TEST_LOG"
-grep -q '^ansible-playbook .*ansible/inventory.ini .*ansible/site.yml --check --diff$' "$BOOTSTRAP_TEST_LOG"
+grep -q '^ansible-playbook --ask-become-pass .*ansible/inventory.ini .*ansible/site.yml --check --diff$' "$BOOTSTRAP_TEST_LOG"
 
 : > "$BOOTSTRAP_TEST_LOG"
 DOTFILES_OS_RELEASE="$TMP/arch-release" "$ROOT/bootstrap"
 test "$(grep -c '^sudo -v$' "$BOOTSTRAP_TEST_LOG")" -eq 2
 grep -q '^sudo -n pacman -S --needed --noconfirm ansible$' "$BOOTSTRAP_TEST_LOG"
 grep -q '^pacman -S --needed --noconfirm ansible$' "$BOOTSTRAP_TEST_LOG"
-grep -q '^ansible-playbook .*ansible/inventory.ini .*ansible/site.yml$' "$BOOTSTRAP_TEST_LOG"
+grep -q '^ansible-playbook --ask-become-pass .*ansible/inventory.ini .*ansible/site.yml$' "$BOOTSTRAP_TEST_LOG"
 
 if DOTFILES_OS_RELEASE="$TMP/other-release" "$ROOT/bootstrap" 2>/dev/null; then
     printf '%s\n' 'unsupported distro unexpectedly succeeded'
