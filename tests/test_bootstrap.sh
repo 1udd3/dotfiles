@@ -67,6 +67,8 @@ grep -Fq "ansible_facts['distribution'] == 'Archlinux' or ansible_facts['distrib
 grep -Fq '  - breeze-cursor-theme' "$ROOT/ansible/group_vars/all.yml"
 grep -Fq '  - breeze-cursors' "$ROOT/ansible/group_vars/all.yml"
 grep -Fq 'XCURSOR_THEME "breeze_cursors"' "$ROOT/home/.config/niri/config.kdl"
+grep -Fq '#battery,' "$ROOT/home/.config/waybar/style.css"
+grep -Fq '#battery {' "$ROOT/home/.config/waybar/style.css"
 grep -Fq 'fastfetch --logo small --structure OS:Host:Kernel:Shell:CPU:Memory' "$ROOT/home/.bashrc"
 grep -Fq '"battery"' "$ROOT/home/.config/waybar/config.jsonc"
 grep -Fq '{capacity}' "$ROOT/home/.config/waybar/config.jsonc"

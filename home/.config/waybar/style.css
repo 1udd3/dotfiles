@@ -29,6 +29,7 @@ window#waybar {
 #memory,
 #temperature,
 #pulseaudio,
+#battery,
 #tray {
   background: alpha(@background-alt, 0.8);
   padding: 0 12px;
@@ -46,6 +47,10 @@ window#waybar {
 
 #cpu {
   color: @primary;
+}
+
+#battery {
+  color: @secondary;
 }
 
 #memory {
