@@ -117,7 +117,8 @@ The package map covers:
 - Bash, Git, and fastfetch
 - Niri, Waybar, Alacritty, Fuzzel, Cava, btop, and Matugen
 - Swaybg, Swaylock, Playerctl, Brightnessctl, Pavucontrol
-- PipeWire and WirePlumber
+- Fedora: PipeWire, `pipewire-alsa`, `pipewire-pulseaudio`, and WirePlumber
+- Arch: PipeWire, `pipewire-alsa`, `pipewire-pulse`, and WirePlumber
 - Neovim, xpad, and Orca
 - Fedora: JetBrains Mono fonts plus Cascadia patched Nerd Font fallback
 - Arch: JetBrains Mono Nerd Font plus Cascadia patched Nerd Font fallback

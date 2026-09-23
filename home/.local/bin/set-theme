@@ -1,19 +1,22 @@
 #!/usr/bin/env bash
+set -Eeuo pipefail
 
 WALL_DIR="$HOME/Pictures/wallpapers"
 mkdir -p "$WALL_DIR"
 
-# 1. Hämta enbart filnamnen på bilderna och låt användaren välja i Fuzzel
-SELECTED_FILE=$(find "$WALL_DIR" -type f \( -name "*.jpg" -o -name "*.png" -o -name "*.jpeg" \) -exec basename {} \; | fuzzel --dmenu -p "Välj bakgrund: ")
-
-# Avbryt om inget valdes
-if [ -z "$SELECTED_FILE" ]; then
+# 1. Hämta fullständiga bildsökvägar och låt användaren välja i Fuzzel
+if ! SELECTED_FILE="$(find "$WALL_DIR" -type f \( -name "*.jpg" -o -name "*.png" -o -name "*.jpeg" \) -print | fuzzel --dmenu -p "Välj bakgrund: ")"; then
     echo "Ingen bild valdes."
     exit 1
 fi
 
-# Sätt ihop den fullständiga sökvägen igen
-WALLPAPER="$WALL_DIR/$SELECTED_FILE"
+# Avbryt om inget valdes
+if [[ -z "$SELECTED_FILE" ]]; then
+    echo "Ingen bild valdes."
+    exit 1
+fi
+
+WALLPAPER="$SELECTED_FILE"
 
 if [ ! -f "$WALLPAPER" ]; then
     echo "Filen hittades inte."
@@ -32,9 +35,12 @@ if [ -e "$STATE_FILE" ]; then
         exit 1
     fi
 fi
-printf '%s\n' "$WALLPAPER" > "$STATE_FILE"
+if ! printf '%s\n' "$WALLPAPER" > "$STATE_FILE"; then
+    printf '%s\n' 'Kunde inte skriva wallpaper-state.' >&2
+    exit 1
+fi
 
 # 3. Verkställ bakgrundsbilden och generera färger med Matugen
-pkill swaybg
+pkill swaybg || true
 swaybg -i "$WALLPAPER" -m fill &
 matugen image "$WALLPAPER"

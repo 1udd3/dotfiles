@@ -16,6 +16,8 @@ dotfiles_packages_fedora:
   - brightnessctl
   - pavucontrol
   - pipewire
+  - pipewire-alsa
+  - pipewire-pulseaudio
   - wireplumber
   - neovim
   - xpad
@@ -41,6 +43,8 @@ dotfiles_packages_arch:
   - brightnessctl
   - pavucontrol
   - pipewire
+  - pipewire-alsa
+  - pipewire-pulse
   - wireplumber
   - neovim
   - xpad
