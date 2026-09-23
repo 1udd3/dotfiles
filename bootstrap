@@ -9,8 +9,8 @@ OS_RELEASE="${DOTFILES_OS_RELEASE:-/etc/os-release}"
 source "$OS_RELEASE"
 
 case "${ID:-}" in
-    fedora) package_command=(dnf install -y ansible-core) ;;
-    arch) package_command=(pacman -S --needed --noconfirm ansible-core) ;;
+    fedora) package_command=(dnf install -y ansible) ;;
+    arch) package_command=(pacman -S --needed --noconfirm ansible) ;;
     *) printf 'error: unsupported distribution: %s\n' "${ID:-unknown}" >&2; exit 1 ;;
 esac
 
@@ -19,7 +19,7 @@ if ((EUID == 0)); then
 elif command -v sudo >/dev/null 2>&1; then
     sudo "${package_command[@]}"
 else
-    printf '%s\n' 'error: sudo is required to install ansible-core' >&2
+    printf '%s\n' 'error: sudo is required to install ansible' >&2
     exit 1
 fi
 
