@@ -45,3 +45,11 @@ if DOTFILES_OS_RELEASE="$TMP/other-release" "$ROOT/bootstrap" 2>/dev/null; then
     printf '%s\n' 'unsupported distro unexpectedly succeeded'
     exit 1
 fi
+
+! grep -qE '^[[:space:]]*-[[:space:]]+wlogout[[:space:]]*$' "$ROOT/ansible/group_vars/all.yml"
+! grep -qE 'spawn(-sh)?[[:space:]]+"wlogout"' "$ROOT/home/.config/niri/config.kdl"
+grep -q "ansible_facts\['user_dir'\]" "$ROOT/ansible/site.yml"
+grep -qE "distribution_version.*44|44.*distribution_version" "$ROOT/ansible/site.yml"
+guard_line="$(grep -n 'name: Require Fedora 44' "$ROOT/ansible/site.yml" | cut -d: -f1)"
+package_line="$(grep -n 'name: Install dotfile dependencies' "$ROOT/ansible/site.yml" | cut -d: -f1)"
+test "$guard_line" -lt "$package_line"

@@ -1,4 +1,4 @@
-# Ansible-Managed Fedora/Arch Dotfiles Design
+# Ansible-Managed Fedora 44+/Arch Dotfiles Design
 
 ## Status
 
@@ -6,7 +6,7 @@ Revised design approved in chat on 2026-09-23. Specification review required bef
 
 ## Goal
 
-Provide a public GitHub repository that can be cloned without authentication. A tiny Bash bootstrap installs Ansible Core, then an Ansible playbook performs all dotfile and package management.
+Provide a public GitHub repository that can be cloned without authentication. A tiny Bash bootstrap installs Ansible Core, then an Ansible playbook performs all dotfile and package management for Fedora 44+ and Arch.
 
 Fresh-machine flow:
 
@@ -19,7 +19,7 @@ git clone "$DOTFILES_REPOSITORY" ~/.dotfiles
 
 ## Architecture
 
-Bash has one job: detect Fedora or Arch, install `ansible-core` with the native package manager, and invoke `ansible-playbook`. No Bash code performs package selection, file copying, backups, or dotfile management. The `.bashrc` and `.bash_profile` files are configuration payload only. Ansible owns package installation, directory creation, file copying, backups, and local-file preservation.
+Bash has one job: detect Fedora 44+ or Arch, install `ansible-core` with the native package manager, and invoke `ansible-playbook`. No Bash code performs package selection, file copying, backups, or dotfile management. The `.bashrc` and `.bash_profile` files are configuration payload only. Ansible owns package installation, directory creation, file copying, backups, and local-file preservation.
 
 The playbook uses two local plays:
 
@@ -90,7 +90,7 @@ The `home/` tree is the single source of truth for managed files. The playbook c
 ## Bootstrap behavior
 
 1. Require Bash, `git`, and a readable `/etc/os-release`.
-2. Accept only Fedora or Arch; fail clearly on other distributions.
+2. Accept only Fedora 44+ or Arch; fail clearly on other distributions.
 3. Install `ansible-core` using `dnf install -y` or `pacman -S --needed --noconfirm`.
 4. Use `sudo` only when not already root.
 5. Run `ansible-playbook -i ansible/inventory.ini ansible/site.yml`, forwarding arguments such as `--check` and `--diff`.
@@ -98,7 +98,7 @@ The `home/` tree is the single source of truth for managed files. The playbook c
 
 ## Playbook behavior
 
-- Assert that the target is Fedora or Arch before package changes.
+- Assert that the target is Fedora 44+ or Arch before package changes.
 - Install required package lists selected from `ansible/group_vars/all.yml` using `ansible.builtin.package`.
 - Create required home and state directories with `ansible.builtin.file`.
 - Copy the tracked `home/` tree with `ansible.builtin.copy`, `backup: yes`, and source modes preserved.
@@ -116,12 +116,14 @@ The package map covers:
 
 - Bash, Git, and fastfetch
 - Niri, Waybar, Alacritty, Fuzzel, Cava, btop, and Matugen
-- Swaybg, Swaylock, Wlogout, Playerctl, Brightnessctl, Pavucontrol
+- Swaybg, Swaylock, Playerctl, Brightnessctl, Pavucontrol
 - PipeWire and WirePlumber
 - Neovim, xpad, and Orca
 - Fedora: JetBrains Mono fonts plus Cascadia patched Nerd Font fallback
 - Arch: JetBrains Mono Nerd Font plus Cascadia patched Nerd Font fallback
 - Papirus icon theme
+
+Matugen is packaged for Fedora 44+. Wlogout is not automatically installed because it is AUR-only on Arch.
 
 Firefox is intentionally not installed.
 

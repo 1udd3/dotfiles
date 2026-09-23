@@ -5,13 +5,14 @@
   become: true
   gather_facts: true
   tasks:
-    - name: Require Fedora or Arch
+    - name: Require Fedora 44+ or Arch
       ansible.builtin.assert:
         that:
-          - ansible_facts['distribution'] in ['Fedora', 'Archlinux']
+          - ansible_facts['distribution'] == 'Archlinux' or ansible_facts['distribution'] == 'Fedora'
+          - ansible_facts['distribution'] == 'Archlinux' or ansible_facts['distribution_version'] | int >= 44
         fail_msg: >-
-          This playbook supports Fedora and Arch only; detected
-          {{ ansible_facts['distribution'] }}.
+          This playbook supports Fedora 44+ and Arch only; detected
+          {{ ansible_facts['distribution'] }} {{ ansible_facts['distribution_version'] }}.
 
     - name: Install dotfile dependencies
       ansible.builtin.package:
@@ -24,7 +25,7 @@
   become: false
   gather_facts: true
   vars:
-    dotfiles_home: "{{ ansible_facts['user_facts']['home'] }}"
+    dotfiles_home: "{{ ansible_facts['user_dir'] }}"
   tasks:
     - name: Create dotfile directories
       ansible.builtin.file:

@@ -12,7 +12,6 @@ dotfiles_packages_fedora:
   - matugen
   - swaybg
   - swaylock
-  - wlogout
   - playerctl
   - brightnessctl
   - pavucontrol
@@ -38,7 +37,6 @@ dotfiles_packages_arch:
   - matugen
   - swaybg
   - swaylock
-  - wlogout
   - playerctl
   - brightnessctl
   - pavucontrol

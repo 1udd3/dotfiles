@@ -1,6 +1,6 @@
 # Dotfiles
 
-Public Fedora and Arch desktop configuration managed by Ansible.
+Public Fedora 44+ and Arch desktop configuration managed by Ansible.
 
 ## Install
 
