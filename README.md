@@ -28,7 +28,7 @@ Preview changes with:
 
 ## Local state
 
-Ansible never manages `~/.config/current_wallpaper`. Edit `~/.config/niri/hardware.kdl` for monitor names, positions, and scale. Run `niri msg outputs` to discover connector names. The playbook creates the hardware file from a tracked example only when absent. Breeze cursors are installed and selected through Niri's `XCURSOR_THEME`. Fastfetch uses its default logo with a compact startup structure.
+Ansible never manages `~/.config/current_wallpaper`. Edit `~/.config/niri/hardware.kdl` for monitor names, positions, and scale. Run `niri msg outputs` to discover connector names. The playbook creates the hardware file from a tracked example only when absent. Breeze cursors are installed and selected through Niri's `XCURSOR_THEME`. Fastfetch uses its built-in small logo with a compact startup structure.
 
 Set Git identity locally on each machine; no identity is committed here:
 
