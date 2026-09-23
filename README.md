@@ -9,7 +9,7 @@ git clone "$DOTFILES_REPOSITORY" ~/.dotfiles
 ~/.dotfiles/bootstrap
 ```
 
-`DOTFILES_REPOSITORY` is this repository's public HTTPS URL. Cloning it requires no login. The tiny Bash bootstrap installs Ansible Core; Ansible performs package installation and file management.
+`DOTFILES_REPOSITORY` is this repository's public HTTPS URL. Cloning it requires no login. The tiny Bash bootstrap installs Ansible Core; Ansible rejects Fedora releases below 44 before installing packages.
 
 ## Update
 

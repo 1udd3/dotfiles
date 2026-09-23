@@ -46,10 +46,17 @@ if DOTFILES_OS_RELEASE="$TMP/other-release" "$ROOT/bootstrap" 2>/dev/null; then
     exit 1
 fi
 
-! grep -qE '^[[:space:]]*-[[:space:]]+wlogout[[:space:]]*$' "$ROOT/ansible/group_vars/all.yml"
-! grep -qE 'spawn(-sh)?[[:space:]]+"wlogout"' "$ROOT/home/.config/niri/config.kdl"
-grep -q "ansible_facts\['user_dir'\]" "$ROOT/ansible/site.yml"
-grep -qE "distribution_version.*44|44.*distribution_version" "$ROOT/ansible/site.yml"
+! grep -Fq 'user_facts' "$ROOT/ansible/site.yml"
+grep -Fq "dotfiles_home: \"{{ ansible_facts['user_dir'] }}\"" "$ROOT/ansible/site.yml"
+grep -Fq "ansible_facts['distribution'] == 'Archlinux'" "$ROOT/ansible/site.yml"
+grep -Fq "ansible_facts['distribution'] == 'Fedora'" "$ROOT/ansible/site.yml"
+grep -Fq "ansible_facts['distribution'] == 'Archlinux' or ansible_facts['distribution_version'] | int >= 44" "$ROOT/ansible/site.yml"
+! grep -Fq 'wlogout' "$ROOT/ansible/group_vars/all.yml"
+! grep -Fq 'wlogout' "$ROOT/home/.config/niri/config.kdl"
+# No AUR helpers or package-manager commands outside Bash's required dnf/pacman path.
+helper_pattern='(^|[^[:alnum:]_])(aur|aurhelper|aurutils|yay|paru|pikaur|trizen|octopi|garud|makepkg|flatpak|snap|brew|zypper|apt|apk)([^[:alnum:]_]|$)'
+! grep -Eiq "$helper_pattern" "$ROOT/bootstrap"
+! grep -Eiq "$helper_pattern|dnf|pacman" "$ROOT/ansible/site.yml"
 guard_line="$(grep -n 'name: Require Fedora 44' "$ROOT/ansible/site.yml" | cut -d: -f1)"
 package_line="$(grep -n 'name: Install dotfile dependencies' "$ROOT/ansible/site.yml" | cut -d: -f1)"
 test "$guard_line" -lt "$package_line"
