@@ -1,25 +1,36 @@
-# Portable Fedora/Arch Dotfiles Design
+# Ansible-Managed Fedora/Arch Dotfiles Design
 
 ## Status
 
-Design approved in chat on 2026-09-23. Specification review required before implementation.
+Revised design approved in chat on 2026-09-23. Specification review required before implementation.
 
 ## Goal
 
-Provide a public GitHub repository that can be cloned without authentication. A small Bash installer copies portable configuration to a new Fedora or Arch machine and installs the tools needed by the selected configuration.
+Provide a public GitHub repository that can be cloned without authentication. A tiny Bash bootstrap installs Ansible Core, then an Ansible playbook performs all dotfile and package management.
 
 Fresh-machine flow:
 
 ```bash
 git clone "$DOTFILES_REPOSITORY" ~/.dotfiles
-~/.dotfiles/install
+~/.dotfiles/bootstrap
 ```
 
 `DOTFILES_REPOSITORY` is the public HTTPS URL published in the repository README. Public cloning requires no login. Publishing and pushing still require the owner's GitHub credentials.
 
+## Architecture
+
+Bash has one job: detect Fedora or Arch, install `ansible-core` with the native package manager, and invoke `ansible-playbook`. No Bash code performs package selection, file copying, backups, or dotfile management. The `.bashrc` and `.bash_profile` files are configuration payload only. Ansible owns package installation, directory creation, file copying, backups, and local-file preservation.
+
+The playbook uses two local plays:
+
+1. A privileged play installs required packages with `ansible.builtin.package`.
+2. An unprivileged play copies configuration into the invoking user's home directory.
+
+The repository uses a single playbook and inventory instead of a role or collection. This keeps first version small while following Ansible's declarative model.
+
 ## Included configuration
 
-- Bash and Git setup, excluding personal Git identity
+- Bash startup files, excluding personal Git identity
 - Niri
 - Waybar
 - Matugen templates and theme pipeline
@@ -31,7 +42,7 @@ git clone "$DOTFILES_REPOSITORY" ~/.dotfiles
 - xpad autostart entry
 - Local `set-theme` and `autostart-wallpaper` scripts
 
-The Niri configuration is shared, but monitor definitions live in an untracked per-machine `hardware.kdl` file. The installer creates that file from an example only when it is missing.
+Niri's shared configuration includes a local `hardware.kdl`. The playbook creates that file from a tracked example only when absent; it never overwrites an existing hardware file.
 
 ## Excluded items
 
@@ -41,10 +52,17 @@ The Niri configuration is shared, but monitor definitions live in an untracked p
 - Firefox installation
 - Caches, logs, history, and application state
 - Full operating-system provisioning
+- Custom Ansible collections beyond Ansible Core built-ins
 
 ## Repository layout
 
 ```text
+bootstrap
+ansible/
+  inventory.ini
+  site.yml
+  group_vars/
+    all.yml
 home/
   .bashrc
   .bash_profile
@@ -58,59 +76,70 @@ home/
     niri/
     nvim/
     waybar/
-bin/
-  autostart-wallpaper
-  set-theme
-install
+  .local/bin/
+    autostart-wallpaper
+    set-theme
 README.md
 .gitignore
+tests/
+  test_bootstrap.sh
 ```
 
-The repository stores current generated theme files as bootstrap defaults. Matugen may update those files locally when a wallpaper is selected. Wallpaper paths and images remain local.
+The `home/` tree is the single source of truth for managed files. The playbook copies it to the target user's home without deleting unmanaged files.
 
-## Installer behavior
+## Bootstrap behavior
 
-1. Require Bash and a supported Fedora or Arch system.
-2. Parse `/etc/os-release` and select the matching package manager.
-3. Install required packages with `dnf` or `pacman`.
-4. Warn about optional tools instead of failing when an optional tool is absent.
-5. Copy only tracked files, preserving executable permissions.
-6. Back up every changed destination under `~/.local/state/dotfiles/backups/$timestamp/` before replacement.
-7. Never overwrite `~/.config/niri/hardware.kdl` or `~/.config/current_wallpaper`.
-8. Normalize hard-coded `/home/ludvig` paths to `$HOME`-based paths.
-9. Make the btop theme path portable.
-10. Remove the unused ncspot Matugen target.
-11. Support `--dry-run` without changing the system.
-12. Print next steps and any missing optional commands.
+1. Require Bash, `git`, and a readable `/etc/os-release`.
+2. Accept only Fedora or Arch; fail clearly on other distributions.
+3. Install `ansible-core` using `dnf install -y` or `pacman -S --needed --noconfirm`.
+4. Use `sudo` only when not already root.
+5. Run `ansible-playbook -i ansible/inventory.ini ansible/site.yml`, forwarding arguments such as `--check` and `--diff`.
+6. Do not install dotfile packages, copy files, or manage secrets in Bash.
 
-The installer copies files rather than symlinking them. This keeps local generated files and per-machine files independent from the Git checkout. Re-running the installer after `git pull` updates managed files safely.
+## Playbook behavior
+
+- Assert that the target is Fedora or Arch before package changes.
+- Install required package lists selected from `ansible/group_vars/all.yml` using `ansible.builtin.package`.
+- Create required home and state directories with `ansible.builtin.file`.
+- Copy the tracked `home/` tree with `ansible.builtin.copy`, `backup: yes`, and source modes preserved.
+- Copy executable helper scripts with mode `0755`.
+- Use `ansible.builtin.stat` plus a `force: no` copy for a missing `~/.config/niri/hardware.kdl`.
+- Never copy, delete, or overwrite `~/.config/current_wallpaper`.
+- Preserve machine-local files not present in the source tree.
+- Print next steps for Git identity, Niri hardware, and wallpaper selection.
+
+The playbook runs locally through `ansible_connection=local`. Package tasks use `become: true`; file tasks run as the invoking user so `~` and ownership remain correct.
 
 ## Dependencies
 
-Required package groups cover:
+The package map covers:
 
-- Shell and Git: Bash, Git, fastfetch
-- Desktop: Niri, Waybar, Alacritty, Fuzzel, Cava, btop, Matugen
-- Session utilities: Swaybg, Swaylock, Wlogout
-- Media and hardware utilities: Playerctl, Brightnessctl, Pavucontrol, PipeWire, WirePlumber
-- Editors and accessories: Neovim, xpad, Orca
-- Fonts and icons: JetBrainsMono Nerd Font, Papirus
+- Bash, Git, and fastfetch
+- Niri, Waybar, Alacritty, Fuzzel, Cava, btop, and Matugen
+- Swaybg, Swaylock, Wlogout, Playerctl, Brightnessctl, Pavucontrol
+- PipeWire and WirePlumber
+- Neovim, xpad, and Orca
+- Fedora: JetBrains Mono fonts plus Cascadia patched Nerd Font fallback
+- Arch: JetBrains Mono Nerd Font plus Cascadia patched Nerd Font fallback
+- Papirus icon theme
 
-Exact package names are kept in a Fedora/Arch mapping in `install`. A missing required package stops installation with a clear message. Firefox is intentionally not installed.
+Firefox is intentionally not installed.
 
 ## Safety and privacy
 
-The repository is public. It must contain no secrets, private keys, tokens, personal Git identity, machine-specific usernames, or private wallpaper paths. Before publishing, scan tracked files for private-key markers, token-like strings, and `/home/ludvig` paths.
+The public repository contains no secrets, private keys, tokens, personal Git identity, machine-specific usernames, or wallpaper paths. Git identity remains local. Before publishing, scan all tracked files for private-key markers, token-like strings, and `/home/ludvig` paths.
 
-Git identity remains local to each machine. The README provides per-machine identity setup rather than committing an identity file.
+Ansible's `backup: yes` protects managed files that change. `set-theme` separately backs up an existing `current_wallpaper` before replacing it because the user-invoked theme selector must update that state.
 
 ## Verification
 
-- Run `bash -n install`.
-- Exercise `install --dry-run` on Fedora and through a fake package-manager path for Arch.
-- Test installation against a temporary HOME to verify copying, backups, permissions, and local override preservation.
+- `bash -n bootstrap tests/test_bootstrap.sh`
+- `ansible-playbook --syntax-check -i ansible/inventory.ini ansible/site.yml`
+- `ansible-inventory -i ansible/inventory.ini --list`
+- Run bootstrap tests with fake `dnf`, `pacman`, `sudo`, and `ansible-playbook` commands.
+- Run a local Ansible check/diff pass without applying package or file changes.
 - Scan the Git index before publishing for secrets and machine-specific paths.
-- Confirm a fresh public HTTPS clone can run the installer without authentication.
+- Confirm a fresh public HTTPS clone can run `bootstrap` without authentication, using a test environment before real package installation.
 
 ## Intentionally deferred
 
@@ -118,3 +147,5 @@ Git identity remains local to each machine. The README provides per-machine iden
 - Automatic AUR helper setup
 - Multiple hardware profiles beyond one local Niri override
 - Full desktop or browser provisioning
+- Custom roles or collections
+EOF
