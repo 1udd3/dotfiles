@@ -5,42 +5,53 @@ WALL_DIR="$HOME/Pictures/wallpapers"
 mkdir -p "$WALL_DIR"
 
 # 1. Hämta fullständiga bildsökvägar och låt användaren välja i Fuzzel
-if ! SELECTED_FILE="$(find "$WALL_DIR" -type f \( -name "*.jpg" -o -name "*.png" -o -name "*.jpeg" \) -print | fuzzel --dmenu -p "Välj bakgrund: ")"; then
-    echo "Ingen bild valdes."
-    exit 1
+mapfile -t WALL_FILES < <(find "$WALL_DIR" -type f \( -name "*.jpg" -o -name "*.png" -o -name "*.jpeg" \) -print)
+WALL_NAMES=()
+for f in "${WALL_FILES[@]}"; do WALL_NAMES+=("$(basename "$f" | sed 's/\.[^.]*$//')"); done
+SELECTED_NAME="$(printf '%s\n' "${WALL_NAMES[@]}" | rofi -dmenu -p "Välj bakgrund:" -theme-str 'window { width: 400px; }')"
+SELECTED_FILE=""
+for i in "${!WALL_NAMES[@]}"; do
+  if [[ "${WALL_NAMES[$i]}" == "$SELECTED_NAME" ]]; then
+    SELECTED_FILE="${WALL_FILES[$i]}"
+    break
+  fi
+done
+if [[ -z "$SELECTED_FILE" ]]; then
+  echo "Ingen bild valdes."
+  exit 1
 fi
 
 # Avbryt om inget valdes
 if [[ -z "$SELECTED_FILE" ]]; then
-    echo "Ingen bild valdes."
-    exit 1
+  echo "Ingen bild valdes."
+  exit 1
 fi
 
 WALLPAPER="$SELECTED_FILE"
 
 if [ ! -f "$WALLPAPER" ]; then
-    echo "Filen hittades inte."
-    exit 1
+  echo "Filen hittades inte."
+  exit 1
 fi
 
 # 2. Spara bilden för omstart
 STATE_FILE="$HOME/.config/current_wallpaper"
 if [ -e "$STATE_FILE" ]; then
-    BACKUP_DIR="$HOME/.local/state/dotfiles/backups"
-    mkdir -p "$BACKUP_DIR" || exit 1
-    timestamp=$(date +%Y%m%d%H%M%S%N) || exit 1
-    backup=$(mktemp "$BACKUP_DIR/current_wallpaper.$timestamp.XXXXXX") || exit 1
-    if ! cp -- "$STATE_FILE" "$backup"; then
-        rm -f -- "$backup"
-        exit 1
-    fi
-fi
-if ! printf '%s\n' "$WALLPAPER" > "$STATE_FILE"; then
-    printf '%s\n' 'Kunde inte skriva wallpaper-state.' >&2
+  BACKUP_DIR="$HOME/.local/state/dotfiles/backups"
+  mkdir -p "$BACKUP_DIR" || exit 1
+  timestamp=$(date +%Y%m%d%H%M%S%N) || exit 1
+  backup=$(mktemp "$BACKUP_DIR/current_wallpaper.$timestamp.XXXXXX") || exit 1
+  if ! cp -- "$STATE_FILE" "$backup"; then
+    rm -f -- "$backup"
     exit 1
+  fi
+fi
+if ! printf '%s\n' "$WALLPAPER" >"$STATE_FILE"; then
+  printf '%s\n' 'Kunde inte skriva wallpaper-state.' >&2
+  exit 1
 fi
 
 # 3. Verkställ bakgrundsbilden och generera färger med Matugen
 pkill swaybg || true
 swaybg -i "$WALLPAPER" -m fill &
-matugen image "$WALLPAPER"
+matugen image "$WALLPAPER" --prefer=saturation

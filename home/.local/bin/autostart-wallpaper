@@ -1,9 +1,14 @@
 #!/usr/bin/env bash
 
-# Läs in den sparade sökvägen om filen finns
+WALL_DIR="$HOME/Pictures/wallpapers"
+
+# Använd sparad wallpaper om den finns, annars ta första bilden
 if [ -f ~/.config/current_wallpaper ]; then
     WALLPAPER=$(cat ~/.config/current_wallpaper)
-    if [ -f "$WALLPAPER" ]; then
-        swaybg -i "$WALLPAPER" -m fill &
-    fi
+else
+    WALLPAPER=$(find "$WALL_DIR" -type f \( -name "*.jpg" -o -name "*.png" -o -name "*.jpeg" \) | sort | head -1)
+fi
+
+if [ -f "$WALLPAPER" ]; then
+    swaybg -i "$WALLPAPER" -m fill &
 fi

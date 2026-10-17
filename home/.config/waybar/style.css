@@ -14,12 +14,32 @@ window#waybar {
   border-radius: 12px;
 }
 
+#workspaces {
+  background: alpha(@background-alt, 0.8);
+  margin: 4px;
+  padding: 0 4px;
+  border-radius: 10px;
+}
+
 #workspaces button {
   padding: 0 5px;
   font-size: 18px;
   color: @foreground;
+  background: transparent;
+  border-radius: 10px;
+  box-shadow: none;
+  text-shadow: none;
+  transition: background 150ms ease-in-out, color 150ms ease-in-out;
 }
 
+#workspaces button:hover {
+  background: alpha(@foreground, 0.15);
+  color: @primary;
+  box-shadow: none;
+  text-shadow: none;
+}
+
+#workspaces button.active,
 #workspaces button.focused {
   color: @primary;
 }

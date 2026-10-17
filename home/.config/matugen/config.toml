@@ -24,3 +24,11 @@ output_path = '~/.config/btop/themes/matugen.theme'
 [templates.lazyvim]
 input_path = '~/.config/matugen/templates/lazyvim.lua'
 output_path = '~/.config/nvim/lua/matugen_colors.lua'
+
+[templates.ncspot]
+input_path = '~/.config/matugen/templates/ncspot.toml'
+output_path = '~/.config/ncspot/config.toml'
+
+[templates.rofi]
+input_path = '~/.config/matugen/templates/rofi.rasi'
+output_path = '~/.config/rofi/colors.rasi'
