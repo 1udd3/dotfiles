@@ -6,7 +6,6 @@ dotfiles_packages_fedora:
   - niri
   - waybar
   - alacritty
-  - fuzzel
   - cava
   - btop
   - matugen
@@ -34,7 +33,6 @@ dotfiles_packages_arch:
   - niri
   - waybar
   - alacritty
-  - fuzzel
   - cava
   - btop
   - matugen
