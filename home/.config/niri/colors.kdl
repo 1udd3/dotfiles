@@ -1,12 +1,12 @@
 layout {
     focus-ring {
 	width 2
-        active-gradient from="#81d3de" to="#b9c6ea" angle=45
-        inactive-color "#899294"
+        active-gradient from="#80d4d9" to="#b6c7e9" angle=45
+        inactive-color "#899393"
     }
     border {
 	width 2
-        active-gradient from="#81d3de" to="#b9c6ea" angle=45
-        inactive-color "#899294"
+        active-gradient from="#80d4d9" to="#b6c7e9" angle=45
+        inactive-color "#899393"
     }
 }

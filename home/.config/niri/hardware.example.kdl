@@ -2,7 +2,7 @@
 // Run `niri msg outputs` to discover connector names.
 // Values omitted from the shared configuration are marked "not set".
 
-/-output "DP-1" {
+output "DP-1" {
     // mode "2560x1440@239.970"
     // scale 1
     // position x=2560 y=0
@@ -16,9 +16,12 @@
     // transform "270"
 }
 
-/-output "eDP-1" {
+output "eDP-1" {
     // mode: not set
-    // scale 0.9
+	  scale 1
     // position: not set
     // transform: not set
+}
+output "DP-6" {
+  mode "2560x1440@74.968"
 }

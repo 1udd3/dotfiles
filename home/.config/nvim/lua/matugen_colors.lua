@@ -1,9 +1,9 @@
 return {
 	bg = "#0e1415",
-	bg_dark = "#171d1e",
-	bg_highlight = "#252b2c",
-	fg = "#dee4e4",
-	fg_dark = "#bec8ca",
-	border = "#899294",
-	primary = "#81d3de",
+	bg_dark = "#161d1d",
+	bg_highlight = "#252b2b",
+	fg = "#dde4e4",
+	fg_dark = "#bec8c9",
+	border = "#899393",
+	primary = "#80d4d9",
 }
